@@ -1,6 +1,7 @@
 export * from './deck';
 export * from './deckVersion';
 export * from './deckVersionTheme';
+export * from './duel';
 export * from './event';
 export * from './eventType';
 export * from './limitRegulation';

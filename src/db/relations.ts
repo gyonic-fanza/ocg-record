@@ -3,6 +3,7 @@ import { relations } from 'drizzle-orm';
 import { decks } from './schema/deck';
 import { deckVersions } from './schema/deckVersion';
 import { deckVersionThemes } from './schema/deckVersionTheme';
+import { duels } from './schema/duel';
 import { events } from './schema/event';
 import { eventTypes } from './schema/eventType';
 import { limitRegulations } from './schema/limitRegulation';
@@ -72,14 +73,25 @@ export const eventsRelations = relations(
     matches: many(matches),
   }),
 );
-export const matchesRelations = relations(matches, ({ one }) => ({
-  event: one(events, {
-    fields: [matches.eventId],
-    references: [events.id],
-  }),
+export const matchesRelations = relations(
+  matches,
+  ({ one, many }) => ({
+    event: one(events, {
+      fields: [matches.eventId],
+      references: [events.id],
+    }),
 
-  deckVersion: one(deckVersions, {
-    fields: [matches.deckVersionId],
-    references: [deckVersions.id],
+    deckVersion: one(deckVersions, {
+      fields: [matches.deckVersionId],
+      references: [deckVersions.id],
+    }),
+
+    duels: many(duels),
+  }),
+);
+export const duelsRelations = relations(duels, ({ one }) => ({
+  match: one(matches, {
+    fields: [duels.matchId],
+    references: [matches.id],
   }),
 }));
