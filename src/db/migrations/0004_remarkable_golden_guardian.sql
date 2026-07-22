@@ -1,0 +1,1 @@
+ALTER TABLE `events` ADD `format` text DEFAULT 'single' NOT NULL;

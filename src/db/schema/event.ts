@@ -13,10 +13,15 @@ export const events = sqliteTable('events', {
       onUpdate: 'cascade',
     }),
 
-  eventDate: text('event_date').notNull(),
+eventDate: text('event_date').notNull(),
 
-  title: text('title'),
+format: text('format', {
+  enum: ['single', 'match'],
+})
+  .notNull()
+  .default('single'),
 
+title: text('title'),
   venue: text('venue'),
 
   participantCount: integer('participant_count'),

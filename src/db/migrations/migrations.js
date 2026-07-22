@@ -5,6 +5,7 @@ import m0000 from './0000_round_thena.sql';
 import m0001 from './0001_salty_hardball.sql';
 import m0002 from './0002_oval_darkhawk.sql';
 import m0003 from './0003_serious_cyclops.sql';
+import m0004 from './0004_remarkable_golden_guardian.sql';
 
   export default {
     journal,
@@ -12,7 +13,8 @@ import m0003 from './0003_serious_cyclops.sql';
       m0000,
 m0001,
 m0002,
-m0003
+m0003,
+m0004
     }
   }
   
