@@ -4,4 +4,5 @@ export * from './deckVersionTheme';
 export * from './event';
 export * from './eventType';
 export * from './limitRegulation';
+export * from './match';
 export * from './theme';

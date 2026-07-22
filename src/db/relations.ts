@@ -3,7 +3,10 @@ import { relations } from 'drizzle-orm';
 import { decks } from './schema/deck';
 import { deckVersions } from './schema/deckVersion';
 import { deckVersionThemes } from './schema/deckVersionTheme';
+import { events } from './schema/event';
+import { eventTypes } from './schema/eventType';
 import { limitRegulations } from './schema/limitRegulation';
+import { matches } from './schema/match';
 import { themes } from './schema/theme';
 export const decksRelations = relations(decks, ({ many }) => ({
   versions: many(deckVersions),
@@ -32,7 +35,7 @@ export const deckVersionsRelations = relations(
       fields: [deckVersions.limitRegulationId],
       references: [limitRegulations.id],
     }),
-
+matches: many(matches),
     themeLinks: many(deckVersionThemes),
   }),
 );
@@ -58,9 +61,25 @@ export const eventTypesRelations = relations(
   }),
 );
 
-export const eventsRelations = relations(events, ({ one }) => ({
-  eventType: one(eventTypes, {
-    fields: [events.eventTypeId],
-    references: [eventTypes.id],
+export const eventsRelations = relations(
+  events,
+  ({ one, many }) => ({
+    eventType: one(eventTypes, {
+      fields: [events.eventTypeId],
+      references: [eventTypes.id],
+    }),
+
+    matches: many(matches),
+  }),
+);
+export const matchesRelations = relations(matches, ({ one }) => ({
+  event: one(events, {
+    fields: [matches.eventId],
+    references: [events.id],
+  }),
+
+  deckVersion: one(deckVersions, {
+    fields: [matches.deckVersionId],
+    references: [deckVersions.id],
   }),
 }));

@@ -6,6 +6,7 @@ import m0001 from './0001_salty_hardball.sql';
 import m0002 from './0002_oval_darkhawk.sql';
 import m0003 from './0003_serious_cyclops.sql';
 import m0004 from './0004_remarkable_golden_guardian.sql';
+import m0005 from './0005_lush_loki.sql';
 
   export default {
     journal,
@@ -14,7 +15,8 @@ import m0004 from './0004_remarkable_golden_guardian.sql';
 m0001,
 m0002,
 m0003,
-m0004
+m0004,
+m0005
     }
   }
   
