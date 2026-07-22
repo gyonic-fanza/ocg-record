@@ -8,7 +8,9 @@ import { events } from './schema/event';
 import { eventTypes } from './schema/eventType';
 import { limitRegulations } from './schema/limitRegulation';
 import { matches } from './schema/match';
+import { matchOpponentThemes } from './schema/matchOpponentTheme';
 import { themes } from './schema/theme';
+
 export const decksRelations = relations(decks, ({ many }) => ({
   versions: many(deckVersions),
 }));
@@ -22,6 +24,7 @@ export const limitRegulationsRelations = relations(
 
 export const themesRelations = relations(themes, ({ many }) => ({
   deckVersionLinks: many(deckVersionThemes),
+  matchOpponentLinks: many(matchOpponentThemes),
 }));
 
 export const deckVersionsRelations = relations(
@@ -87,11 +90,29 @@ export const matchesRelations = relations(
     }),
 
     duels: many(duels),
+
+    opponentThemeLinks: many(matchOpponentThemes),
   }),
 );
+
 export const duelsRelations = relations(duels, ({ one }) => ({
   match: one(matches, {
     fields: [duels.matchId],
     references: [matches.id],
   }),
 }));
+
+export const matchOpponentThemesRelations = relations(
+  matchOpponentThemes,
+  ({ one }) => ({
+    match: one(matches, {
+      fields: [matchOpponentThemes.matchId],
+      references: [matches.id],
+    }),
+
+    theme: one(themes, {
+      fields: [matchOpponentThemes.themeId],
+      references: [themes.id],
+    }),
+  }),
+);
