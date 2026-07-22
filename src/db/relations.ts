@@ -5,7 +5,6 @@ import { deckVersions } from './schema/deckVersion';
 import { deckVersionThemes } from './schema/deckVersionTheme';
 import { limitRegulations } from './schema/limitRegulation';
 import { themes } from './schema/theme';
-
 export const decksRelations = relations(decks, ({ many }) => ({
   versions: many(deckVersions),
 }));
@@ -52,3 +51,16 @@ export const deckVersionThemesRelations = relations(
     }),
   }),
 );
+export const eventTypesRelations = relations(
+  eventTypes,
+  ({ many }) => ({
+    events: many(events),
+  }),
+);
+
+export const eventsRelations = relations(events, ({ one }) => ({
+  eventType: one(eventTypes, {
+    fields: [events.eventTypeId],
+    references: [eventTypes.id],
+  }),
+}));
