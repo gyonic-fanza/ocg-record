@@ -11,3 +11,6 @@ export const themes = sqliteTable('themes', {
 
   ...timestamps,
 });
+export type Theme = typeof themes.$inferSelect;
+
+export type NewTheme = typeof themes.$inferInsert;

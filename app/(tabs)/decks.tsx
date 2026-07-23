@@ -12,7 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDecks } from '../../src/hooks/useDecks';
 
 export default function DecksScreen() {
-const router = useRouter();
+  const router = useRouter();
   const {
     decks,
     isLoading,
@@ -27,22 +27,32 @@ const router = useRouter();
         <Text style={styles.subtitle}>
           使用するデッキと構築を管理します
         </Text>
-<Pressable
-  style={styles.createButton}
-  onPress={() => router.push('/decks/new')}
->
-  <Text style={styles.createButtonText}>
-    デッキを登録する
-  </Text>
-</Pressable>
-<Pressable
-  style={styles.regulationButton}
-  onPress={() => router.push('/limit-regulations')}
->
-  <Text style={styles.regulationButtonText}>
-    リミットレギュレーションを管理
-  </Text>
-</Pressable>
+        <Pressable
+          style={styles.createButton}
+          onPress={() => router.push('/decks/new')}
+        >
+          <Text style={styles.createButtonText}>
+            デッキを登録する
+          </Text>
+        </Pressable>
+        <Pressable
+          style={styles.regulationButton}
+          onPress={() => router.push('/limit-regulations')}
+        >
+          <Text style={styles.regulationButtonText}>
+            リミットレギュレーションを管理
+          </Text>
+        </Pressable>
+
+        <Pressable
+          style={styles.themeButton}
+          onPress={() => router.push('/themes')}
+        >
+          <Text style={styles.themeButtonText}>
+            テーマを管理
+          </Text>
+        </Pressable>
+
         <View style={styles.card}>
           <Text style={styles.cardTitle}>登録済みデッキ</Text>
 
@@ -105,44 +115,59 @@ const router = useRouter();
                 )}
               </Pressable>
             ))}
-            </View>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-regulationButton: {
-  alignItems: 'center',
-  justifyContent: 'center',
-  minHeight: 50,
-  marginTop: 12,
-  borderWidth: 1,
-  borderColor: '#7c3aed',
-  borderRadius: 10,
-  backgroundColor: '#ffffff',
-},
-regulationButtonText: {
-  fontSize: 16,
-  fontWeight: '700',
-  color: '#7c3aed',
-},
-pressedDeckItem: {
-  opacity: 0.6,
-},
-createButton: {
-  alignItems: 'center',
-  justifyContent: 'center',
-  minHeight: 50,
-  marginTop: 24,
-  borderRadius: 10,
-  backgroundColor: '#7c3aed',
-},
-createButtonText: {
-  fontSize: 16,
-  fontWeight: '700',
-  color: '#ffffff',
-},
+  regulationButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 50,
+    marginTop: 12,
+    borderWidth: 1,
+    borderColor: '#7c3aed',
+    borderRadius: 10,
+    backgroundColor: '#ffffff',
+  },
+  regulationButtonText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#7c3aed',
+  },
+  themeButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 50,
+    marginTop: 12,
+    borderWidth: 1,
+    borderColor: '#7c3aed',
+    borderRadius: 10,
+    backgroundColor: '#ffffff',
+  },
+  themeButtonText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#7c3aed',
+  },
+  pressedDeckItem: {
+    opacity: 0.6,
+  },
+  createButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 50,
+    marginTop: 24,
+    borderRadius: 10,
+    backgroundColor: '#7c3aed',
+  },
+  createButtonText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#ffffff',
+  },
   safeArea: {
     flex: 1,
     backgroundColor: '#f5f3ff',
