@@ -50,3 +50,10 @@ export async function updateDeck(
     })
     .where(eq(decks.id, id));
 }
+export async function deleteDeck(
+  id: number,
+): Promise<void> {
+  await db
+    .delete(decks)
+    .where(eq(decks.id, id));
+}

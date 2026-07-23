@@ -1,6 +1,8 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -8,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { deleteDeck } from '../../src/services';
 
 import { useDeck } from '../../src/hooks/useDeck';
 
@@ -28,13 +31,52 @@ export default function DeckDetailScreen() {
       ? parsedId
       : null;
 
+const [isDeleting, setIsDeleting] = useState(false);
   const {
     deck,
     isLoading,
     error,
     reload,
   } = useDeck(deckId);
+const executeDelete = async (id: number) => {
+  setIsDeleting(true);
 
+  try {
+    await deleteDeck(id);
+    router.replace('/(tabs)/decks');
+  } catch (caughtError: unknown) {
+    const message =
+      caughtError instanceof Error
+        ? caughtError.message
+        : 'デッキの削除に失敗しました。';
+
+    Alert.alert('削除できませんでした', message);
+  } finally {
+    setIsDeleting(false);
+  }
+};
+
+const handleDelete = () => {
+  if (!deck || isDeleting) {
+    return;
+  }
+
+  Alert.alert(
+    'デッキを削除しますか？',
+    `「${deck.name}」を削除します。この操作は取り消せません。`,
+    [
+      {
+        text: 'キャンセル',
+        style: 'cancel',
+      },
+      {
+        text: '削除する',
+        style: 'destructive',
+        onPress: () => void executeDelete(deck.id),
+      },
+    ],
+  );
+};
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
@@ -122,6 +164,22 @@ export default function DeckDetailScreen() {
                 編集する
               </Text>
             </Pressable>
+<Pressable
+  style={[
+    styles.deleteButton,
+    isDeleting && styles.disabledButton,
+  ]}
+  onPress={handleDelete}
+  disabled={isDeleting}
+>
+  {isDeleting ? (
+    <ActivityIndicator color="#b91c1c" />
+  ) : (
+    <Text style={styles.deleteButtonText}>
+      削除する
+    </Text>
+  )}
+</Pressable>
           </View>
         )}
       </ScrollView>
@@ -130,6 +188,24 @@ export default function DeckDetailScreen() {
 }
 
 const styles = StyleSheet.create({
+deleteButton: {
+  alignItems: 'center',
+  justifyContent: 'center',
+  minHeight: 50,
+  marginTop: 12,
+  borderWidth: 1,
+  borderColor: '#b91c1c',
+  borderRadius: 10,
+  backgroundColor: '#ffffff',
+},
+deleteButtonText: {
+  fontSize: 16,
+  fontWeight: '700',
+  color: '#b91c1c',
+},
+disabledButton: {
+  opacity: 0.6,
+},
 editButton: {
   alignItems: 'center',
   justifyContent: 'center',
