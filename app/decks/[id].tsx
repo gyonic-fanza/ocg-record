@@ -32,7 +32,7 @@ export default function DeckDetailScreen() {
       ? parsedId
       : null;
 
-const [isDeleting, setIsDeleting] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const {
     deck,
     isLoading,
@@ -40,50 +40,50 @@ const [isDeleting, setIsDeleting] = useState(false);
     reload,
   } = useDeck(deckId);
   const {
-  deckVersions,
-  isLoading: areDeckVersionsLoading,
-  error: deckVersionsError,
-  reload: reloadDeckVersions,
-} = useDeckVersions(deckId);
-const executeDelete = async (id: number) => {
-  setIsDeleting(true);
+    deckVersions,
+    isLoading: areDeckVersionsLoading,
+    error: deckVersionsError,
+    reload: reloadDeckVersions,
+  } = useDeckVersions(deckId);
+  const executeDelete = async (id: number) => {
+    setIsDeleting(true);
 
-  try {
-    await deleteDeck(id);
-    router.replace('/(tabs)/decks');
-  } catch (caughtError: unknown) {
-    const message =
-      caughtError instanceof Error
-        ? caughtError.message
-        : 'デッキの削除に失敗しました。';
+    try {
+      await deleteDeck(id);
+      router.replace('/(tabs)/decks');
+    } catch (caughtError: unknown) {
+      const message =
+        caughtError instanceof Error
+          ? caughtError.message
+          : 'デッキの削除に失敗しました。';
 
-    Alert.alert('削除できませんでした', message);
-  } finally {
-    setIsDeleting(false);
-  }
-};
+      Alert.alert('削除できませんでした', message);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
-const handleDelete = () => {
-  if (!deck || isDeleting) {
-    return;
-  }
+  const handleDelete = () => {
+    if (!deck || isDeleting) {
+      return;
+    }
 
-  Alert.alert(
-    'デッキを削除しますか？',
-    `「${deck.name}」を削除します。この操作は取り消せません。`,
-    [
-      {
-        text: 'キャンセル',
-        style: 'cancel',
-      },
-      {
-        text: '削除する',
-        style: 'destructive',
-        onPress: () => void executeDelete(deck.id),
-      },
-    ],
-  );
-};
+    Alert.alert(
+      'デッキを削除しますか？',
+      `「${deck.name}」を削除します。この操作は取り消せません。`,
+      [
+        {
+          text: 'キャンセル',
+          style: 'cancel',
+        },
+        {
+          text: '削除する',
+          style: 'destructive',
+          onPress: () => void executeDelete(deck.id),
+        },
+      ],
+    );
+  };
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
@@ -171,182 +171,194 @@ const handleDelete = () => {
                 編集する
               </Text>
             </Pressable>
-<Pressable
-  style={[
-    styles.deleteButton,
-    isDeleting && styles.disabledButton,
-  ]}
-  onPress={handleDelete}
-  disabled={isDeleting}
->
-  {isDeleting ? (
-    <ActivityIndicator color="#b91c1c" />
-  ) : (
-    <Text style={styles.deleteButtonText}>
-      削除する
-    </Text>
-  )}
-</Pressable>
+            <Pressable
+              style={[
+                styles.deleteButton,
+                isDeleting && styles.disabledButton,
+              ]}
+              onPress={handleDelete}
+              disabled={isDeleting}
+            >
+              {isDeleting ? (
+                <ActivityIndicator color="#b91c1c" />
+              ) : (
+                <Text style={styles.deleteButtonText}>
+                  削除する
+                </Text>
+              )}
+            </Pressable>
           </View>
         )}
-{!isLoading && !error && deck && (
-  <View style={styles.card}>
-    <Text style={styles.sectionTitle}>構築一覧</Text>
-<Pressable
-  style={styles.createVersionButton}
-  onPress={() =>
-    router.push({
-      pathname: '/decks/[id]/versions/new',
-      params: {
-        id: String(deck.id),
-      },
-    })
-  }
->
-  <Text style={styles.createVersionButtonText}>
-    新しい構築を登録する
-  </Text>
-</Pressable>
-    {areDeckVersionsLoading && (
-      <View style={styles.versionStatusContainer}>
-        <ActivityIndicator size="small" />
-        <Text style={styles.statusText}>
-          構築を読み込み中...
-        </Text>
-      </View>
-    )}
+        {!isLoading && !error && deck && (
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>構築一覧</Text>
+            <Pressable
+              style={styles.createVersionButton}
+              onPress={() =>
+                router.push({
+                  pathname: '/decks/[id]/versions/new',
+                  params: {
+                    id: String(deck.id),
+                  },
+                })
+              }
+            >
+              <Text style={styles.createVersionButtonText}>
+                新しい構築を登録する
+              </Text>
+            </Pressable>
+            {areDeckVersionsLoading && (
+              <View style={styles.versionStatusContainer}>
+                <ActivityIndicator size="small" />
+                <Text style={styles.statusText}>
+                  構築を読み込み中...
+                </Text>
+              </View>
+            )}
 
-    {!areDeckVersionsLoading && deckVersionsError && (
-      <View>
-        <Text style={styles.errorText}>
-          {deckVersionsError.message}
-        </Text>
+            {!areDeckVersionsLoading && deckVersionsError && (
+              <View>
+                <Text style={styles.errorText}>
+                  {deckVersionsError.message}
+                </Text>
 
-        <Pressable
-          style={styles.retryButton}
-          onPress={() => void reloadDeckVersions()}
-        >
-          <Text style={styles.retryButtonText}>
-            再読み込み
-          </Text>
-        </Pressable>
-      </View>
-    )}
+                <Pressable
+                  style={styles.retryButton}
+                  onPress={() => void reloadDeckVersions()}
+                >
+                  <Text style={styles.retryButtonText}>
+                    再読み込み
+                  </Text>
+                </Pressable>
+              </View>
+            )}
 
-    {!areDeckVersionsLoading &&
-      !deckVersionsError &&
-      deckVersions.length === 0 && (
-        <Text style={styles.statusText}>
-          構築はまだ登録されていません。
-        </Text>
-      )}
+            {!areDeckVersionsLoading &&
+              !deckVersionsError &&
+              deckVersions.length === 0 && (
+                <Text style={styles.statusText}>
+                  構築はまだ登録されていません。
+                </Text>
+              )}
 
-    {!areDeckVersionsLoading &&
-      !deckVersionsError &&
-      deckVersions.map((version) => (
-        <View
-          key={version.id}
-          style={styles.versionItem}
-        >
-          <Text style={styles.versionName}>
-            {version.name}
-          </Text>
+            {!areDeckVersionsLoading &&
+              !deckVersionsError &&
+              deckVersions.map((version) => {
+                return (
+                  <Pressable
+                    key={version.id}
+                    style={styles.versionItem}
+                    onPress={() =>
+                      router.push({
+                        pathname:
+                          '/decks/[id]/versions/[versionId]',
+                        params: {
+                          id: String(deck.id),
+                          versionId: String(version.id),
+                        },
+                      })
+                    }
+                  >
+                    <Text style={styles.versionName}>
+                      {version.name}
+                    </Text>
 
-          <Text style={styles.versionRegulation}>
-            {version.limitRegulationName}
-          </Text>
+                    <Text style={styles.versionRegulation}>
+                      {version.limitRegulationName}
+                    </Text>
 
-          {version.memo && (
-            <Text style={styles.versionMemo}>
-              {version.memo}
-            </Text>
-          )}
-        </View>
-      ))}
-  </View>
-)}
+                    {version.memo ? (
+                      <Text style={styles.versionMemo}>
+                        {version.memo}
+                      </Text>
+                    ) : null}
+                  </Pressable>
+                );
+              })}
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-createVersionButton: {
-  alignItems: 'center',
-  justifyContent: 'center',
-  minHeight: 48,
-  marginBottom: 20,
-  borderRadius: 10,
-  backgroundColor: '#7c3aed',
-},
-createVersionButtonText: {
-  fontSize: 16,
-  fontWeight: '700',
-  color: '#ffffff',
-},
-sectionTitle: {
-  marginBottom: 16,
-  fontSize: 20,
-  fontWeight: '700',
-  color: '#1f2937',
-},
-versionStatusContainer: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: 8,
-},
-versionItem: {
-  paddingVertical: 14,
-  borderBottomWidth: StyleSheet.hairlineWidth,
-  borderBottomColor: '#d1d5db',
-},
-versionName: {
-  fontSize: 17,
-  fontWeight: '700',
-  color: '#1f2937',
-},
-versionRegulation: {
-  marginTop: 4,
-  fontSize: 14,
-  color: '#7c3aed',
-},
-versionMemo: {
-  marginTop: 8,
-  fontSize: 14,
-  lineHeight: 20,
-  color: '#4b5563',
-},
-deleteButton: {
-  alignItems: 'center',
-  justifyContent: 'center',
-  minHeight: 50,
-  marginTop: 12,
-  borderWidth: 1,
-  borderColor: '#b91c1c',
-  borderRadius: 10,
-  backgroundColor: '#ffffff',
-},
-deleteButtonText: {
-  fontSize: 16,
-  fontWeight: '700',
-  color: '#b91c1c',
-},
-disabledButton: {
-  opacity: 0.6,
-},
-editButton: {
-  alignItems: 'center',
-  justifyContent: 'center',
-  minHeight: 50,
-  marginTop: 28,
-  borderRadius: 10,
-  backgroundColor: '#7c3aed',
-},
-editButtonText: {
-  fontSize: 16,
-  fontWeight: '700',
-  color: '#ffffff',
-},
+  createVersionButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 48,
+    marginBottom: 20,
+    borderRadius: 10,
+    backgroundColor: '#7c3aed',
+  },
+  createVersionButtonText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#ffffff',
+  },
+  sectionTitle: {
+    marginBottom: 16,
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#1f2937',
+  },
+  versionStatusContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  versionItem: {
+    paddingVertical: 14,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#d1d5db',
+  },
+  versionName: {
+    fontSize: 17,
+    fontWeight: '700',
+    color: '#1f2937',
+  },
+  versionRegulation: {
+    marginTop: 4,
+    fontSize: 14,
+    color: '#7c3aed',
+  },
+  versionMemo: {
+    marginTop: 8,
+    fontSize: 14,
+    lineHeight: 20,
+    color: '#4b5563',
+  },
+  deleteButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 50,
+    marginTop: 12,
+    borderWidth: 1,
+    borderColor: '#b91c1c',
+    borderRadius: 10,
+    backgroundColor: '#ffffff',
+  },
+  deleteButtonText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#b91c1c',
+  },
+  disabledButton: {
+    opacity: 0.6,
+  },
+  editButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 50,
+    marginTop: 28,
+    borderRadius: 10,
+    backgroundColor: '#7c3aed',
+  },
+  editButtonText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#ffffff',
+  },
   safeArea: {
     flex: 1,
     backgroundColor: '#f5f3ff',

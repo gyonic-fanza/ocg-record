@@ -52,3 +52,58 @@ export async function createDeckVersion(
     .insert(deckVersions)
     .values(input);
 }
+export async function getDeckVersionById(
+  id: number,
+): Promise<DeckVersionListItem | undefined> {
+  const [row] = await db
+    .select({
+      deckVersion: deckVersions,
+      limitRegulationName: limitRegulations.name,
+    })
+    .from(deckVersions)
+    .innerJoin(
+      limitRegulations,
+      eq(
+        deckVersions.limitRegulationId,
+        limitRegulations.id,
+      ),
+    )
+    .where(eq(deckVersions.id, id))
+    .limit(1);
+
+  if (!row) {
+    return undefined;
+  }
+
+  return {
+    ...row.deckVersion,
+    limitRegulationName: row.limitRegulationName,
+  };
+}
+export type UpdateDeckVersionInput = Pick<
+  NewDeckVersion,
+  | 'limitRegulationId'
+  | 'name'
+  | 'memo'
+  | 'neuronUrl'
+>;
+
+export async function updateDeckVersion(
+  id: number,
+  input: UpdateDeckVersionInput,
+): Promise<void> {
+  await db
+    .update(deckVersions)
+    .set({
+      ...input,
+      updatedAt: new Date(),
+    })
+    .where(eq(deckVersions.id, id));
+}
+export async function deleteDeckVersion(
+  id: number,
+): Promise<void> {
+  await db
+    .delete(deckVersions)
+    .where(eq(deckVersions.id, id));
+}
