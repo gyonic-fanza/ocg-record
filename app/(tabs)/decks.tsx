@@ -1,0 +1,158 @@
+import {
+    ActivityIndicator,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+import { useDecks } from '../../src/hooks/useDecks';
+
+export default function DecksScreen() {
+  const {
+    decks,
+    isLoading,
+    error,
+    reload,
+  } = useDecks();
+
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.title}>デッキ管理</Text>
+        <Text style={styles.subtitle}>
+          使用するデッキと構築を管理します
+        </Text>
+
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>登録済みデッキ</Text>
+
+          {isLoading && (
+            <View style={styles.statusContainer}>
+              <ActivityIndicator size="small" />
+              <Text style={styles.statusText}>読み込み中...</Text>
+            </View>
+          )}
+
+          {error && (
+            <View style={styles.errorContainer}>
+              <Text style={styles.errorText}>
+                {error.message}
+              </Text>
+
+              <Pressable
+                style={styles.retryButton}
+                onPress={() => void reload()}
+              >
+                <Text style={styles.retryButtonText}>
+                  再読み込み
+                </Text>
+              </Pressable>
+            </View>
+          )}
+
+          {!isLoading && !error && decks.length === 0 && (
+            <Text style={styles.statusText}>
+              デッキはまだ登録されていません。
+            </Text>
+          )}
+
+          {!isLoading &&
+            !error &&
+            decks.map((deck) => (
+              <View key={deck.id} style={styles.deckItem}>
+                <Text style={styles.deckName}>
+                  {deck.name}
+                </Text>
+
+                {deck.description && (
+                  <Text style={styles.deckDescription}>
+                    {deck.description}
+                  </Text>
+                )}
+              </View>
+            ))}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#f5f3ff',
+  },
+  container: {
+    padding: 24,
+    paddingBottom: 48,
+  },
+  title: {
+    marginTop: 24,
+    fontSize: 30,
+    fontWeight: '700',
+    color: '#1f2937',
+  },
+  subtitle: {
+    marginTop: 8,
+    fontSize: 16,
+    color: '#6b7280',
+  },
+  card: {
+    marginTop: 32,
+    padding: 20,
+    borderRadius: 16,
+    backgroundColor: '#ffffff',
+  },
+  cardTitle: {
+    marginBottom: 12,
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#1f2937',
+  },
+  statusContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  statusText: {
+    fontSize: 15,
+    color: '#6b7280',
+  },
+  errorContainer: {
+    gap: 12,
+  },
+  errorText: {
+    fontSize: 15,
+    color: '#b91c1c',
+  },
+  retryButton: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 8,
+    backgroundColor: '#7c3aed',
+  },
+  retryButtonText: {
+    fontWeight: '700',
+    color: '#ffffff',
+  },
+  deckItem: {
+    paddingVertical: 12,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#d1d5db',
+  },
+  deckName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1f2937',
+  },
+  deckDescription: {
+    marginTop: 4,
+    fontSize: 14,
+    lineHeight: 20,
+    color: '#6b7280',
+  },
+});

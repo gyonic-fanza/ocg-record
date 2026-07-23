@@ -11,3 +11,5 @@ export const decks = sqliteTable('decks', {
 
   ...timestamps,
 });
+export type Deck = typeof decks.$inferSelect;
+export type NewDeck = typeof decks.$inferInsert;

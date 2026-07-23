@@ -14,7 +14,25 @@ export default function TabLayout() {
         options={{
           title: 'ホーム',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" color={color} size={size} />
+            <Ionicons
+              name="home-outline"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="decks"
+        options={{
+          title: 'デッキ',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons
+              name="albums-outline"
+              color={color}
+              size={size}
+            />
           ),
         }}
       />
