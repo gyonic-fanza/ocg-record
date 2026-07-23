@@ -1,11 +1,11 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import {
-    ActivityIndicator,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -95,15 +95,33 @@ export default function DeckDetailScreen() {
         {!isLoading && !error && deck && (
           <View style={styles.card}>
             <Text style={styles.label}>デッキ名</Text>
+
             <Text style={styles.deckName}>
               {deck.name}
             </Text>
 
             <Text style={styles.label}>説明・メモ</Text>
+
             <Text style={styles.description}>
               {deck.description ||
                 '説明は登録されていません。'}
             </Text>
+
+            <Pressable
+              style={styles.editButton}
+              onPress={() =>
+                router.push({
+                  pathname: '/decks/[id]/edit',
+                  params: {
+                    id: String(deck.id),
+                  },
+                })
+              }
+            >
+              <Text style={styles.editButtonText}>
+                編集する
+              </Text>
+            </Pressable>
           </View>
         )}
       </ScrollView>
@@ -112,6 +130,19 @@ export default function DeckDetailScreen() {
 }
 
 const styles = StyleSheet.create({
+editButton: {
+  alignItems: 'center',
+  justifyContent: 'center',
+  minHeight: 50,
+  marginTop: 28,
+  borderRadius: 10,
+  backgroundColor: '#7c3aed',
+},
+editButtonText: {
+  fontSize: 16,
+  fontWeight: '700',
+  color: '#ffffff',
+},
   safeArea: {
     flex: 1,
     backgroundColor: '#f5f3ff',

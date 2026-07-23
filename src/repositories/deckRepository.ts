@@ -33,3 +33,20 @@ export async function createDeck(
 ): Promise<void> {
   await db.insert(decks).values(input);
 }
+export type UpdateDeckInput = Pick<
+  NewDeck,
+  'name' | 'description'
+>;
+
+export async function updateDeck(
+  id: number,
+  input: UpdateDeckInput,
+): Promise<void> {
+  await db
+    .update(decks)
+    .set({
+      ...input,
+      updatedAt: new Date(),
+    })
+    .where(eq(decks.id, id));
+}
