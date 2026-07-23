@@ -35,6 +35,14 @@ const router = useRouter();
     デッキを登録する
   </Text>
 </Pressable>
+<Pressable
+  style={styles.regulationButton}
+  onPress={() => router.push('/limit-regulations')}
+>
+  <Text style={styles.regulationButtonText}>
+    リミットレギュレーションを管理
+  </Text>
+</Pressable>
         <View style={styles.card}>
           <Text style={styles.cardTitle}>登録済みデッキ</Text>
 
@@ -104,6 +112,21 @@ const router = useRouter();
 }
 
 const styles = StyleSheet.create({
+regulationButton: {
+  alignItems: 'center',
+  justifyContent: 'center',
+  minHeight: 50,
+  marginTop: 12,
+  borderWidth: 1,
+  borderColor: '#7c3aed',
+  borderRadius: 10,
+  backgroundColor: '#ffffff',
+},
+regulationButtonText: {
+  fontSize: 16,
+  fontWeight: '700',
+  color: '#7c3aed',
+},
 pressedDeckItem: {
   opacity: 0.6,
 },

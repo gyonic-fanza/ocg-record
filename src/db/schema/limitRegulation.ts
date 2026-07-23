@@ -17,3 +17,8 @@ export const limitRegulations = sqliteTable('limit_regulations', {
 
   ...timestamps,
 });
+export type LimitRegulation =
+  typeof limitRegulations.$inferSelect;
+
+export type NewLimitRegulation =
+  typeof limitRegulations.$inferInsert;
