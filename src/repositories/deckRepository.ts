@@ -1,10 +1,9 @@
-import { asc } from 'drizzle-orm';
-
+import { asc, eq } from 'drizzle-orm';
 import { db } from '../db';
 import {
-    decks,
-    type Deck,
-    type NewDeck,
+  decks,
+  type Deck,
+  type NewDeck,
 } from '../db/schema/deck';
 
 export type CreateDeckInput = Pick<
@@ -18,7 +17,17 @@ export async function getAllDecks(): Promise<Deck[]> {
     .from(decks)
     .orderBy(asc(decks.name));
 }
+export async function getDeckById(
+  id: number,
+): Promise<Deck | undefined> {
+  const [deck] = await db
+    .select()
+    .from(decks)
+    .where(eq(decks.id, id))
+    .limit(1);
 
+  return deck;
+}
 export async function createDeck(
   input: CreateDeckInput,
 ): Promise<void> {

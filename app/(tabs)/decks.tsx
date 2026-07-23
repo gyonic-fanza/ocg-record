@@ -71,7 +71,21 @@ const router = useRouter();
           {!isLoading &&
             !error &&
             decks.map((deck) => (
-              <View key={deck.id} style={styles.deckItem}>
+              <Pressable
+                key={deck.id}
+                style={({ pressed }) => [
+                  styles.deckItem,
+                  pressed && styles.pressedDeckItem,
+                ]}
+                onPress={() =>
+                  router.push({
+                    pathname: '/decks/[id]',
+                    params: {
+                      id: String(deck.id),
+                    },
+                  })
+                }
+              >
                 <Text style={styles.deckName}>
                   {deck.name}
                 </Text>
@@ -81,15 +95,18 @@ const router = useRouter();
                     {deck.description}
                   </Text>
                 )}
-              </View>
+              </Pressable>
             ))}
-        </View>
+            </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+pressedDeckItem: {
+  opacity: 0.6,
+},
 createButton: {
   alignItems: 'center',
   justifyContent: 'center',
