@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useFocusEffect } from 'expo-router';
+import { useCallback, useState } from 'react';
 
 import type { Deck } from '../db/schema/deck';
 import { getAllDecks } from '../repositories';
@@ -33,9 +34,11 @@ export function useDecks(): UseDecksResult {
     }
   }, []);
 
-  useEffect(() => {
-    void loadDecks();
-  }, [loadDecks]);
+  useFocusEffect(
+    useCallback(() => {
+      void loadDecks();
+    }, [loadDecks]),
+  );
 
   return {
     decks,

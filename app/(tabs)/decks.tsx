@@ -1,16 +1,18 @@
+import { useRouter } from 'expo-router';
 import {
-    ActivityIndicator,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useDecks } from '../../src/hooks/useDecks';
 
 export default function DecksScreen() {
+const router = useRouter();
   const {
     decks,
     isLoading,
@@ -25,7 +27,14 @@ export default function DecksScreen() {
         <Text style={styles.subtitle}>
           使用するデッキと構築を管理します
         </Text>
-
+<Pressable
+  style={styles.createButton}
+  onPress={() => router.push('/decks/new')}
+>
+  <Text style={styles.createButtonText}>
+    デッキを登録する
+  </Text>
+</Pressable>
         <View style={styles.card}>
           <Text style={styles.cardTitle}>登録済みデッキ</Text>
 
@@ -81,6 +90,19 @@ export default function DecksScreen() {
 }
 
 const styles = StyleSheet.create({
+createButton: {
+  alignItems: 'center',
+  justifyContent: 'center',
+  minHeight: 50,
+  marginTop: 24,
+  borderRadius: 10,
+  backgroundColor: '#7c3aed',
+},
+createButtonText: {
+  fontSize: 16,
+  fontWeight: '700',
+  color: '#ffffff',
+},
   safeArea: {
     flex: 1,
     backgroundColor: '#f5f3ff',
