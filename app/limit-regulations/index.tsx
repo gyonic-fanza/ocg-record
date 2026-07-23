@@ -39,9 +39,18 @@ export default function LimitRegulationsScreen() {
           リミットレギュレーション
         </Text>
 
-        <Text style={styles.subtitle}>
-          構築に適用するリミットレギュレーションを管理します
-        </Text>
+<Text style={styles.subtitle}>
+  構築に適用するリミットレギュレーションを管理します
+</Text>
+
+<Pressable
+  style={styles.createButton}
+  onPress={() => router.push('/limit-regulations/new')}
+>
+  <Text style={styles.createButtonText}>
+    新しく登録する
+  </Text>
+</Pressable>
 
         <View style={styles.card}>
           <Text style={styles.cardTitle}>登録済み一覧</Text>
@@ -107,6 +116,19 @@ export default function LimitRegulationsScreen() {
 }
 
 const styles = StyleSheet.create({
+createButton: {
+  alignItems: 'center',
+  justifyContent: 'center',
+  minHeight: 50,
+  marginTop: 24,
+  borderRadius: 10,
+  backgroundColor: '#7c3aed',
+},
+createButtonText: {
+  fontSize: 16,
+  fontWeight: '700',
+  color: '#ffffff',
+},
   safeArea: {
     flex: 1,
     backgroundColor: '#f5f3ff',
