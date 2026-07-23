@@ -1,8 +1,8 @@
 import {
-    integer,
-    sqliteTable,
-    text,
-    uniqueIndex,
+  integer,
+  sqliteTable,
+  text,
+  uniqueIndex,
 } from 'drizzle-orm/sqlite-core';
 
 import { timestamps } from './common';
@@ -44,5 +44,8 @@ export const deckVersions = sqliteTable(
   ],
 );
 
-export type DeckVersion = typeof deckVersions.$inferSelect;
-export type NewDeckVersion = typeof deckVersions.$inferInsert;
+export type DeckVersion =
+  typeof deckVersions.$inferSelect;
+
+export type NewDeckVersion =
+  typeof deckVersions.$inferInsert;

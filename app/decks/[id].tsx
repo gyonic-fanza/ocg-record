@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { deleteDeck } from '../../src/services';
 
 import { useDeck } from '../../src/hooks/useDeck';
+import { useDeckVersions } from '../../src/hooks/useDeckVersions';
 
 export default function DeckDetailScreen() {
   const router = useRouter();
@@ -38,6 +39,12 @@ const [isDeleting, setIsDeleting] = useState(false);
     error,
     reload,
   } = useDeck(deckId);
+  const {
+  deckVersions,
+  isLoading: areDeckVersionsLoading,
+  error: deckVersionsError,
+  reload: reloadDeckVersions,
+} = useDeckVersions(deckId);
 const executeDelete = async (id: number) => {
   setIsDeleting(true);
 
@@ -182,12 +189,133 @@ const handleDelete = () => {
 </Pressable>
           </View>
         )}
+{!isLoading && !error && deck && (
+  <View style={styles.card}>
+    <Text style={styles.sectionTitle}>構築一覧</Text>
+<Pressable
+  style={styles.createVersionButton}
+  onPress={() =>
+    router.push({
+      pathname: '/decks/[id]/versions/new',
+      params: {
+        id: String(deck.id),
+      },
+    })
+  }
+>
+  <Text style={styles.createVersionButtonText}>
+    新しい構築を登録する
+  </Text>
+</Pressable>
+    {areDeckVersionsLoading && (
+      <View style={styles.versionStatusContainer}>
+        <ActivityIndicator size="small" />
+        <Text style={styles.statusText}>
+          構築を読み込み中...
+        </Text>
+      </View>
+    )}
+
+    {!areDeckVersionsLoading && deckVersionsError && (
+      <View>
+        <Text style={styles.errorText}>
+          {deckVersionsError.message}
+        </Text>
+
+        <Pressable
+          style={styles.retryButton}
+          onPress={() => void reloadDeckVersions()}
+        >
+          <Text style={styles.retryButtonText}>
+            再読み込み
+          </Text>
+        </Pressable>
+      </View>
+    )}
+
+    {!areDeckVersionsLoading &&
+      !deckVersionsError &&
+      deckVersions.length === 0 && (
+        <Text style={styles.statusText}>
+          構築はまだ登録されていません。
+        </Text>
+      )}
+
+    {!areDeckVersionsLoading &&
+      !deckVersionsError &&
+      deckVersions.map((version) => (
+        <View
+          key={version.id}
+          style={styles.versionItem}
+        >
+          <Text style={styles.versionName}>
+            {version.name}
+          </Text>
+
+          <Text style={styles.versionRegulation}>
+            {version.limitRegulationName}
+          </Text>
+
+          {version.memo && (
+            <Text style={styles.versionMemo}>
+              {version.memo}
+            </Text>
+          )}
+        </View>
+      ))}
+  </View>
+)}
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+createVersionButton: {
+  alignItems: 'center',
+  justifyContent: 'center',
+  minHeight: 48,
+  marginBottom: 20,
+  borderRadius: 10,
+  backgroundColor: '#7c3aed',
+},
+createVersionButtonText: {
+  fontSize: 16,
+  fontWeight: '700',
+  color: '#ffffff',
+},
+sectionTitle: {
+  marginBottom: 16,
+  fontSize: 20,
+  fontWeight: '700',
+  color: '#1f2937',
+},
+versionStatusContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  gap: 8,
+},
+versionItem: {
+  paddingVertical: 14,
+  borderBottomWidth: StyleSheet.hairlineWidth,
+  borderBottomColor: '#d1d5db',
+},
+versionName: {
+  fontSize: 17,
+  fontWeight: '700',
+  color: '#1f2937',
+},
+versionRegulation: {
+  marginTop: 4,
+  fontSize: 14,
+  color: '#7c3aed',
+},
+versionMemo: {
+  marginTop: 8,
+  fontSize: 14,
+  lineHeight: 20,
+  color: '#4b5563',
+},
 deleteButton: {
   alignItems: 'center',
   justifyContent: 'center',
